@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌸 音楽 · Kho Nhạc Cá Nhân - Sakura Player</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3844/3844724.png">
+  <style>
+    :root {
+      /* Gam màu Sakura Night: Hồng phấn, hồng pastel trên nền tím mận Nhật Bản */
+      --bg-gradient: linear-gradient(135deg, #1c0e1e 0%, #281229 35%, #180b1a 70%, #120713 100%);
+      --top-bg: rgba(28, 14, 30, 0.75);
+      --bottom-bg: rgba(25, 11, 27, 0.94);
+      --card-border: rgba(251, 207, 232, 0.12);
+      --pink-gradient: linear-gradient(135deg, #f472b6 0%, #fb7185 50%, #fda4af 100%);
+      --pink-primary: #f472b6;
+      --pink-light: #fbcfe8;
+      --pink-glow: rgba(244, 114, 182, 0.45);
+      --text-main: #fdf2f8;
+      --text-sub: #d8b4d6;
+      --row-hover: rgba(244, 114, 182, 0.08);
+      --row-active: rgba(244, 114, 182, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* HIỆU ỨNG CÁNH HOA ANH ĐÀO (SAKURA) RƠI NHẸ NHÀNG */
+    .sakura-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      background: radial-gradient(circle, #fbcfe8 20%, #f472b6 80%);
+      border-radius: 150% 0 150% 0;
+      opacity: 0.35;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-20px) rotate(0deg) translateX(0);
+        opacity: 0.55;
+      }
+      100% {
+        transform: translateY(105vh) rotate(360deg) translateX(70px);
+        opacity: 0;
+      }
+    }
+
+    /* 1. THANH TRÊN CÙNG: PHONG CÁCH NHẬT BẢN */
+    .top-bar {
+      height: 72px;
+      padding: 0 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--top-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--card-border);
+      z-index: 10;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 250px;
+    }
+
+    .brand-title {
+      font-size: 21px;
+      font-weight: 800;
+      background: var(--pink-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-kanji {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--pink-light);
+      letter-spacing: 2px;
+      opacity: 0.85;
+    }
+
+    .song-badge {
+      background: rgba(244, 114, 182, 0.15);
+      border: 1px solid rgba(244, 114, 182, 0.35);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--pink-light);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .search-area {
+      flex: 1;
+      max-width: 580px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      width: 16px;
+      height: 16px;
+      stroke: var(--pink-light);
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 20px 0 46px;
+      border-radius: 22px;
+      background: rgba(22, 10, 24, 0.75);
+      border: 1px solid rgba(251, 207, 232, 0.18);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.25s;
+    }
+
+    .search-input::placeholder {
+      color: rgba(216, 180, 214, 0.6);
+    }
+
+    .search-input:focus {
+      border-color: var(--pink-primary);
+      box-shadow: 0 0 20px var(--pink-glow);
+      background: rgba(22, 10, 24, 0.95);
+    }
+
+    .actions-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+      justify-content: flex-end;
+    }
+
+    .btn-add {
+      background: var(--pink-gradient);
+      color: #3b0724;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(244, 114, 182, 0.35);
+    }
+
+    .btn-add:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(244, 114, 182, 0.55);
+      filter: brightness(1.05);
+    }
+
+    /* 2. KHU VỰC Ở GIỮA: DANH SÁCH BÀI HÁT */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 5;
+    }
+
+    .main-content::-webkit-scrollbar {
+      width: 7px;
+    }
+    .main-content::-webkit-scrollbar-thumb {
+      background: rgba(244, 114, 182, 0.25);
+      border-radius: 10px;
+    }
+
+    .playlist-table-header {
+      display: grid;
+      grid-template-columns: 50px 1fr 280px 140px;
+      padding: 10px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-sub);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .song-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .song-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 280px 140px;
+      align-items: center;
+      padding: 12px 20px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .song-row:hover {
+      background: var(--row-hover);
+      border-color: rgba(244, 114, 182, 0.2);
+      transform: translateX(5px);
+    }
+
+    .song-row.active {
+      background: var(--row-active);
+      border-color: rgba(244, 114, 182, 0.45);
+      box-shadow: inset 0 0 15px rgba(244, 114, 182, 0.1);
+    }
+
+    .row-index {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .song-row.active .row-index {
+      color: var(--pink-primary);
+    }
+
+    .row-title-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .row-icon-music {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(244, 114, 182, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--pink-primary);
+      flex-shrink: 0;
+      border: 1px solid rgba(244, 114, 182, 0.2);
+    }
+
+    .song-row.active .row-icon-music {
+      background: var(--pink-gradient);
+      color: #3b0724;
+    }
+
+    .row-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .song-row.active .row-title {
+      color: var(--pink-light);
+    }
+
+    .row-artist {
+      font-size: 14px;
+      color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row-status {
+      font-size: 13px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Hiệu ứng sóng nhạc Equalizer Nhật Bản */
+    .eq-wave {
+      display: none;
+      align-items: flex-end;
+      gap: 3px;
+      height: 14px;
+    }
+
+    .eq-bar {
+      width: 3px;
+      background: var(--pink-primary);
+      border-radius: 2px;
+      animation: eq 0.8s ease-in-out infinite alternate;
+    }
+    .eq-bar:nth-child(1) { height: 4px; animation-delay: 0.1s; }
+    .eq-bar:nth-child(2) { height: 14px; animation-delay: 0.35s; }
+    .eq-bar:nth-child(3) { height: 8px; animation-delay: 0.2s; }
+
+    @keyframes eq {
+      0% { height: 3px; }
+      100% { height: 14px; }
+    }
+
+    .playing-tag {
+      display: none;
+      color: var(--pink-light);
+      font-weight: 600;
+      font-size: 12px;
+      background: rgba(244, 114, 182, 0.2);
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .song-row.active.playing .eq-wave {
+      display: inline-flex;
+    }
+    .song-row.active.playing .playing-tag {
+      display: inline-block;
+    }
+
+    /* 3. THANH PLAYER DƯỚI CÙNG (SAKURA BOTTOM DOCK) */
+    .bottom-bar {
+      height: 98px;
+      padding: 0 36px;
+      display: grid;
+      grid-template-columns: 320px 1fr 320px;
+      align-items: center;
+      gap: 24px;
+      background: var(--bottom-bg);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-top: 1px solid var(--card-border);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+
+    /* Góc trái: Đĩa than hoa anh đào */
+    .now-playing-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .vinyl-disk {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #f472b6 18%, #1f0b1f 65%, #100511 100%);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      animation: rotate 12s linear infinite;
+      animation-play-state: paused;
+      border: 2px solid rgba(244, 114, 182, 0.3);
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vinyl-disk::after {
+      content: "🌸";
+      font-size: 18px;
+      filter: drop-shadow(0 0 4px rgba(244, 114, 182, 0.8));
+    }
+
+    .vinyl-disk.playing {
+      animation-play-state: running;
+      border-color: var(--pink-primary);
+      box-shadow: 0 0 18px var(--pink-glow);
+    }
+
+    @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+    .track-meta {
+      min-width: 0;
+    }
+
+    .cur-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cur-artist {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Ở giữa: Nút điều khiển SVG thanh thoát + Thanh chỉnh giây */
+    .player-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .ctrl-buttons {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .btn-action {
+      background: none;
+      border: none;
+      color: #d8b4d6;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .btn-action svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      color: #fff;
+      background: rgba(244, 114, 182, 0.12);
+      transform: scale(1.12);
+    }
+
+    .btn-action.active {
+      color: var(--pink-primary);
+      background: rgba(244, 114, 182, 0.18);
+      box-shadow: 0 0 15px var(--pink-glow);
+    }
+
+    .btn-action.active svg {
+      stroke: var(--pink-primary);
+    }
+
+    .badge-loop-one {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--pink-primary);
+      display: none;
+    }
+
+    .btn-play-pause {
+      background: var(--pink-gradient);
+      color: #3b0724;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      box-shadow: 0 4px 18px var(--pink-glow);
+    }
+
+    .btn-play-pause svg {
+      width: 22px;
+      height: 22px;
+      fill: #3b0724;
+      stroke: none;
+    }
+
+    .btn-play-pause:hover {
+      transform: scale(1.08);
+      background: var(--pink-gradient);
+      box-shadow: 0 6px 25px rgba(244, 114, 182, 0.7);
+    }
+
+    .btn-play-pause:active {
+      transform: scale(0.95);
+    }
+
+    .seek-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .time-tag {
+      font-size: 12px;
+      color: var(--text-sub);
+      font-weight: 500;
+      min-width: 42px;
+      text-align: center;
+    }
+
+    .slider-seek {
+      -webkit-appearance: none;
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+      cursor: pointer;
+      transition: height 0.15s;
+    }
+
+    .slider-seek:hover {
+      height: 8px;
+    }
+
+    .slider-seek::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 10px var(--pink-primary);
+      cursor: pointer;
+    }
+
+    /* Góc phải: Chỉnh âm lượng với SVG thanh thoát */
+    .now-playing-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .vol-btn {
+      background: none;
+      border: none;
+      color: #d8b4d6;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .vol-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      transition: all 0.2s;
+    }
+
+    .vol-btn:hover {
+      color: var(--pink-primary);
+      background: rgba(244, 114, 182, 0.1);
+      transform: scale(1.1);
+    }
+
+    .slider-vol {
+      -webkit-appearance: none;
+      width: 105px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .slider-vol::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--pink-light);
+      box-shadow: 0 0 6px var(--pink-glow);
+      cursor: pointer;
+    }
+
+    /* Responsive cho điện thoại */
+    @media (max-width: 768px) {
+      .top-bar { padding: 0 16px; }
+      .brand-title { font-size: 18px; }
+      .brand-kanji { display: none; }
+      .actions-area { min-width: auto; }
+      .playlist-table-header { display: none; }
+      .song-row {
+        grid-template-columns: 35px 1fr auto;
+        padding: 10px 12px;
+      }
+      .row-artist { display: none; }
+      .main-content { padding: 12px 16px; }
+      .bottom-bar {
+        grid-template-columns: 1fr;
+        height: auto;
+        padding: 12px 16px 16px;
+        gap: 10px;
+      }
+      .now-playing-right { display: none; }
+      .player-center { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HIỆU ỨNG CÁNH HOA ANH ĐÀO BAY NHẸ NHÀNG -->
+  <div class="sakura-container" id="sakura-container"></div>
+
+  <!-- 1. THANH TRÊN CÙNG: LOGO NHẬT BẢN + TÌM KIẾM + THÊM BÀI -->
+  <header class="top-bar">
+    <div class="brand-area">
+      <h1 class="brand-title">
+        <span>🌸 音楽</span>
+        <span class="brand-kanji">「 私の音楽 」</span>
+      </h1>
+      <span class="song-badge" id="song-count">1 曲 · 1 bài</span>
+    </div>
+
+    <div class="search-area">
+      <!-- Icon kính lúp SVG mềm mại -->
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="search" class="search-input" placeholder="検索 · Tìm kiếm bài hát hoặc nghệ sĩ..." oninput="filterSongs()">
+    </div>
+
+    <div class="actions-area">
+      <label class="btn-add" title="Chọn file mp3 từ máy">
+        🌸 ＋ Thêm nhạc (.mp3)
+        <input type="file" id="file-input" accept="audio/*" multiple style="display:none;" onchange="handleFileSelect(event)">
+      </label>
+    </div>
+  </header>
+
+  <!-- 2. KHU VỰC Ở GIỮA: CUỘN LƯỚT TOÀN MÀN HÌNH -->
+  <main class="main-content">
+    <div class="playlist-table-header">
+      <span>#</span>
+      <span>曲名 · Tiêu đề bài hát</span>
+      <span>アーティスト · Nghệ sĩ</span>
+      <span>状態 · Trạng thái</span>
+    </div>
+
+    <div class="song-list" id="playlist">
+      <!-- Danh sách bài hát hiển thị ở đây -->
+    </div>
+  </main>
+
+  <!-- 3. THANH PLAYER DƯỚI CÙNG (SAKURA DOCK VỚI SVG NHẬT BẢN TINH TẾ) -->
+  <footer class="bottom-bar">
+    
+    <!-- Góc trái: Đĩa than hoa anh đào & Tên bài đang phát -->
+    <div class="now-playing-left">
+      <div class="vinyl-disk" id="disk"></div>
+      <div class="track-meta">
+        <div class="cur-title" id="title">Chưa chọn bài</div>
+        <div class="cur-artist" id="artist">曲を選択してください (Chọn một bài để nghe)</div>
+      </div>
+    </div>
+
+    <!-- Ở giữa: Nút điều khiển SVG thanh thoát & Thanh chỉnh giây -->
+    <div class="player-center">
+      <div class="ctrl-buttons">
+        
+        <!-- Nút Random / Xáo trộn bài (SVG cánh cung mềm mại) -->
+        <button class="btn-action" id="btn-shuffle" title="Xáo trộn bài (Phím S)" onclick="toggleShuffle()">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 3 21 3 21 8"></polyline>
+            <line x1="4" y1="20" x2="21" y2="3"></line>
+            <polyline points="21 16 21 21 16 21"></polyline>
+            <line x1="15" y1="15" x2="21" y2="21"></line>
+            <line x1="4" y1="4" x2="9" y2="9"></line>
+          </svg>
+        </button>
+
+        <!-- Nút Bài trước -->
+        <button class="btn-action" title="Bài trước (Mũi tên trái)" onclick="prevSong()">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="19 20 9 12 19 4 19 20" fill="currentColor"></polygon>
+            <line x1="5" y1="19" x2="5" y2="5"></line>
+          </svg>
+        </button>
+
+        <!-- Nút Phát/Dừng Chính -->
+        <button class="btn-action btn-play-pause" id="btn-play" title="Phát/Tạm dừng (Phím Space)" onclick="togglePlay()">
+          <!-- SVG Play (Mặc định) -->
+          <svg id="icon-play" viewBox="0 0 24 24" style="margin-left: 2px;">
+            <polygon points="6 4 20 12 6 20 6 4"></polygon>
+          </svg>
+          <!-- SVG Pause (Khi phát) -->
+          <svg id="icon-pause" viewBox="0 0 24 24" style="display:none;">
+            <rect x="6" y="5" width="4" height="14" rx="1.5"></rect>
+            <rect x="14" y="5" width="4" height="14" rx="1.5"></rect>
+          </svg>
+        </button>
+
+        <!-- Nút Bài kế tiếp -->
+        <button class="btn-action" title="Bài kế tiếp (Mũi tên phải)" onclick="nextSong()">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
+            <line x1="19" y1="5" x2="19" y2="19"></line>
+          </svg>
+        </button>
+
+        <!-- Nút Lặp lại danh sách / 1 bài -->
+        <button class="btn-action" id="btn-loop" title="Lặp lại danh sách" onclick="toggleLoop()">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="17 1 21 5 17 9"></polyline>
+            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+            <polyline points="7 23 3 19 7 15"></polyline>
+            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+          </svg>
+          <span class="badge-loop-one" id="badge-loop-one">1</span>
+        </button>
+
+      </div>
+
+      <div class="seek-row">
+        <span class="time-tag" id="current-time">00:00</span>
+        <input type="range" id="seek-bar" class="slider-seek" value="0" min="0" step="1">
+        <span class="time-tag" id="total-time">00:00</span>
+      </div>
+    </div>
+
+    <!-- Góc phải: Chỉnh âm lượng với SVG thanh thoát -->
+    <div class="now-playing-right">
+      <button class="vol-btn" id="vol-btn" title="Bật/Tắt tiếng" onclick="toggleMute()">
+        <!-- SVG Loa to -->
+        <svg id="vol-icon-high" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <!-- SVG Loa nhỏ -->
+        <svg id="vol-icon-low" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <!-- SVG Tắt tiếng -->
+        <svg id="vol-icon-mute" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+      </button>
+      <input type="range" id="vol-slider" class="slider-vol" value="100" min="0" max="100" oninput="changeVolume(this.value)">
+    </div>
+
+  </footer>
+
+  <audio id="audio"></audio>
+  <audio id="preload-audio" preload="auto" style="display:none;"></audio>
+
+  <script>
+    // TẠO HIỆU ỨNG CÁNH HOA ANH ĐÀO RƠI NHẸ NHÀNG
+    function createSakuraPetals() {
+      const container = document.getElementById('sakura-container');
+      const petalCount = 20;
+
+      for (let i = 0; i < petalCount; i++) {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        
+        const size = Math.random() * 9 + 8;
+        petal.style.width = `${size}px`;
+        petal.style.height = `${size * 1.3}px`;
+        petal.style.left = `${Math.random() * 100}vw`;
+        petal.style.animationDuration = `${Math.random() * 8 + 7}s`;
+        petal.style.animationDelay = `${Math.random() * 6}s`;
+        
+        container.appendChild(petal);
+      }
+    }
+
+    // Danh sách bài hát mặc định
+    let songs = [
+      {
+        title: "Bản Hợp Xướng",
+        artist: "Nhạc của Bach",
+        url: "https://github.com/Bach2732008/nhac/releases/download/123/B.n.H.p.X.ng.mp3"
+      }
+    ];
+
+    let currentIndex = 0;
+    let isShuffle = false;
+    let isLoopOne = false;
+    let previousVolume = 1;
+
+    const audio = document.getElementById('audio');
+    const preloadAudio = document.getElementById('preload-audio');
+    const iconPlay = document.getElementById('icon-play');
+    const iconPause = document.getElementById('icon-pause');
+    const disk = document.getElementById('disk');
+    const seekBar = document.getElementById('seek-bar');
+    const volSlider = document.getElementById('vol-slider');
+
+    function init() {
+      createSakuraPetals();
+      updateCount();
+      renderPlaylist(songs);
+      if (songs.length > 0 && songs[0].url) {
+        loadSong(0, false);
+      }
+    }
+
+    function updateCount() {
+      document.getElementById('song-count').innerText = `${songs.length} 曲 · ${songs.length} bài`;
+    }
+
+    function loadSong(index, autoPlay = true) {
+      if (index < 0 || index >= songs.length) return;
+      currentIndex = index;
+      const song = songs[currentIndex];
+      
+      document.getElementById('title').innerText = song.title;
+      document.getElementById('artist').innerText = song.artist;
+      audio.src = song.url;
+
+      updatePlaylistHighlight();
+
+      if (autoPlay) {
+        audio.play().then(() => {
+          showPlayIcon(false);
+          disk.classList.add('playing');
+        }).catch(err => console.log(err));
+      }
+
+      // Hỗ trợ MediaSession (Màn hình khóa / Phím media bàn phím)
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: song.title,
+          artist: song.artist,
+          artwork: [{ src: 'https://images.unsplash.com/photo-1528164344705-475426879c0d?w=300' }]
+        });
+      }
+
+      // Preload bài tiếp theo
+      const nextIndex = (currentIndex + 1) % songs.length;
+      if (songs[nextIndex] && songs[nextIndex].url) {
+        preloadAudio.src = songs[nextIndex].url;
+      }
+    }
+
+    function showPlayIcon(isPlay) {
+      iconPlay.style.display = isPlay ? 'block' : 'none';
+      iconPause.style.display = isPlay ? 'none' : 'block';
+    }
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        showPlayIcon(false);
+        disk.classList.add('playing');
+      } else {
+        audio.pause();
+        showPlayIcon(true);
+        disk.classList.remove('playing');
+      }
+      updatePlaylistHighlight();
+    }
+
+    function nextSong() {
+      if (isShuffle) {
+        let randIndex = Math.floor(Math.random() * songs.length);
+        loadSong(randIndex);
+      } else {
+        loadSong((currentIndex + 1) % songs.length);
+      }
+    }
+
+    function prevSong() {
+      loadSong((currentIndex - 1 + songs.length) % songs.length);
+    }
+
+    function toggleShuffle() {
+      isShuffle = !isShuffle;
+      document.getElementById('btn-shuffle').classList.toggle('active', isShuffle);
+    }
+
+    function toggleLoop() {
+      isLoopOne = !isLoopOne;
+      const badge = document.getElementById('badge-loop-one');
+      const btn = document.getElementById('btn-loop');
+      
+      if (isLoopOne) {
+        badge.style.display = 'block';
+        btn.classList.add('active');
+        btn.title = "Đang lặp lại 1 bài";
+      } else {
+        badge.style.display = 'none';
+        btn.classList.remove('active');
+        btn.title = "Lặp lại danh sách";
+      }
+    }
+
+    // Âm lượng bằng SVG tinh tế
+    function updateVolumeIcons(val) {
+      const high = document.getElementById('vol-icon-high');
+      const low = document.getElementById('vol-icon-low');
+      const mute = document.getElementById('vol-icon-mute');
+
+      high.style.display = 'none';
+      low.style.display = 'none';
+      mute.style.display = 'none';
+
+      if (val == 0) {
+        mute.style.display = 'block';
+      } else if (val < 50) {
+        low.style.display = 'block';
+      } else {
+        high.style.display = 'block';
+      }
+    }
+
+    function changeVolume(val) {
+      audio.volume = val / 100;
+      updateVolumeIcons(val);
+    }
+
+    function toggleMute() {
+      if (audio.volume > 0) {
+        previousVolume = audio.volume;
+        audio.volume = 0;
+        volSlider.value = 0;
+        updateVolumeIcons(0);
+      } else {
+        audio.volume = previousVolume || 1;
+        volSlider.value = audio.volume * 100;
+        updateVolumeIcons(audio.volume * 100);
+      }
+    }
+
+    // Tua nhạc
+    audio.ontimeupdate = () => {
+      seekBar.value = audio.currentTime;
+      document.getElementById('current-time').innerText = formatTime(audio.currentTime);
+      updateSeekFill();
+    };
+
+    audio.onloadedmetadata = () => {
+      seekBar.max = audio.duration;
+      document.getElementById('total-time').innerText = formatTime(audio.duration);
+      updateSeekFill();
+    };
+
+    audio.onended = () => {
+      if (isLoopOne) {
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        nextSong();
+      }
+    };
+
+    seekBar.oninput = () => {
+      audio.currentTime = seekBar.value;
+      updateSeekFill();
+    };
+
+    function updateSeekFill() {
+      const percent = (seekBar.value / (seekBar.max || 1)) * 100;
+      seekBar.style.background = `linear-gradient(to right, #f472b6 ${percent}%, rgba(255,255,255,0.15) ${percent}%)`;
+    }
+
+    function formatTime(sec) {
+      if (isNaN(sec)) return "00:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function renderPlaylist(list) {
+      const container = document.getElementById('playlist');
+      container.innerHTML = list.map((s, i) => {
+        const isActive = i === currentIndex;
+        return `
+          <div class="song-row ${isActive ? 'active' : ''} ${isActive && !audio.paused ? 'playing' : ''}" onclick="loadSong(${i})">
+            <span class="row-index">${i + 1}</span>
+            <div class="row-title-area">
+              <div class="row-icon-music">🌸</div>
+              <span class="row-title">${s.title}</span>
+            </div>
+            <span class="row-artist">${s.artist}</span>
+            <div class="row-status">
+              <div class="eq-wave">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+              </div>
+              <span class="playing-tag">再生中</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updatePlaylistHighlight() {
+      document.querySelectorAll('.song-row').forEach((el, idx) => {
+        const isCurrent = idx === currentIndex;
+        el.classList.toggle('active', isCurrent);
+        el.classList.toggle('playing', isCurrent && !audio.paused);
+      });
+    }
+
+    function filterSongs() {
+      const q = document.getElementById('search').value.toLowerCase();
+      const filtered = songs.filter(s => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q));
+      renderPlaylist(filtered);
+    }
+
+    // Chọn nạp file từ máy tính
+    function handleFileSelect(event) {
+      const files = event.target.files;
+      if (!files.length) return;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const blobUrl = URL.createObjectURL(file);
+        const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+        songs.push({
+          title: nameWithoutExt,
+          artist: "ローカル音楽 · Máy tính",
+          url: blobUrl
+        });
+      }
+
+      updateCount();
+      renderPlaylist(songs);
+    }
+
+    // Phím tắt bàn phím
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.code === 'ArrowRight') {
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+      } else if (e.code === 'ArrowLeft') {
+        audio.currentTime = Math.max(0, audio.currentTime - 5);
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
