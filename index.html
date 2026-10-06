@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>🌸 音楽 · Kho Nhạc Cá Nhân - Sakura Player</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3844/3844724.png">
   <style>
@@ -281,11 +281,21 @@
       color: var(--pink-primary);
       flex-shrink: 0;
       border: 1px solid rgba(244, 114, 182, 0.2);
+      overflow: hidden;
+    }
+
+    .row-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
     }
 
     .song-row.active .row-icon-music {
       background: var(--pink-gradient);
       color: #3b0724;
+      border-color: var(--pink-primary);
+      box-shadow: 0 0 10px var(--pink-glow);
     }
 
     .row-title {
@@ -307,6 +317,10 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .row-artist-mobile {
+      display: none;
     }
 
     .row-status {
@@ -620,27 +634,195 @@
       cursor: pointer;
     }
 
-    /* Responsive cho điện thoại */
+    /* TỐI ƯU HÓA ĐẶC BIỆT CHO ĐIỆN THOẠI (MOBILE RESPONSIVE) */
     @media (max-width: 768px) {
-      .top-bar { padding: 0 16px; }
-      .brand-title { font-size: 18px; }
-      .brand-kanji { display: none; }
-      .actions-area { min-width: auto; }
-      .playlist-table-header { display: none; }
-      .song-row {
-        grid-template-columns: 35px 1fr auto;
-        padding: 10px 12px;
+      body {
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height cho trình duyệt di động */
       }
-      .row-artist { display: none; }
-      .main-content { padding: 12px 16px; }
-      .bottom-bar {
-        grid-template-columns: 1fr;
+
+      /* 1. Header trên mobile */
+      .top-bar {
         height: auto;
-        padding: 12px 16px 16px;
+        padding: 12px 16px;
+        flex-direction: column;
+        align-items: stretch;
         gap: 10px;
       }
-      .now-playing-right { display: none; }
-      .player-center { max-width: 100%; }
+
+      .brand-area {
+        justify-content: space-between;
+        min-width: auto;
+      }
+
+      .brand-title {
+        font-size: 19px;
+      }
+
+      .brand-kanji {
+        display: none;
+      }
+
+      .search-area {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .search-input {
+        height: 40px;
+        font-size: 13px;
+        padding-left: 42px;
+      }
+
+      /* 2. Danh sách bài hát trên mobile */
+      .playlist-table-header {
+        display: none;
+      }
+
+      .main-content {
+        padding: 10px 12px 130px 12px; /* Chừa khoảng trống dưới cùng để không bị thanh player che mất bài cuối */
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .song-row {
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        gap: 12px;
+        border-radius: 12px;
+      }
+
+      .row-index {
+        display: none; /* Ẩn số thứ tự trên mobile để nhường chỗ cho ảnh bìa */
+      }
+
+      .row-title-area {
+        flex: 1;
+        gap: 12px;
+      }
+
+      .row-icon-music {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+      }
+
+      .row-text-group {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .row-title {
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .row-artist-desktop {
+        display: none;
+      }
+
+      .row-artist-mobile {
+        display: block;
+        font-size: 12px;
+        color: var(--text-sub);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .row-duration {
+        font-size: 12px;
+        color: var(--text-sub);
+      }
+
+      .row-status {
+        font-size: 12px;
+      }
+
+      /* 3. Thanh Player dưới cùng trên mobile (Chuẩn Spotify Mobile) */
+      .bottom-bar {
+        height: auto;
+        padding: 10px 16px max(14px, env(safe-area-inset-bottom));
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: rgba(22, 9, 24, 0.96);
+      }
+
+      .now-playing-left {
+        width: 100%;
+        gap: 12px;
+      }
+
+      .vinyl-disk {
+        width: 46px;
+        height: 46px;
+      }
+
+      .vinyl-disk::after {
+        font-size: 14px;
+      }
+
+      .cur-title {
+        font-size: 14px;
+      }
+
+      .cur-artist {
+        font-size: 12px;
+      }
+
+      .now-playing-right {
+        display: none; /* Ẩn thanh volume riêng trên mobile vì đã có phím âm lượng vật lý của điện thoại */
+      }
+
+      .player-center {
+        width: 100%;
+        max-width: 100%;
+        gap: 6px;
+      }
+
+      .ctrl-buttons {
+        gap: 20px;
+      }
+
+      .btn-action {
+        width: 36px;
+        height: 36px;
+      }
+
+      .btn-action svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .btn-play-pause {
+        width: 44px;
+        height: 44px;
+      }
+
+      .btn-play-pause svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .seek-row {
+        gap: 8px;
+      }
+
+      .time-tag {
+        font-size: 11px;
+        min-width: 35px;
+      }
+
+      .slider-seek {
+        height: 5px;
+      }
     }
   </style>
 </head>
@@ -666,13 +848,6 @@
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
       <input type="text" id="search" class="search-input" placeholder="検索 · Tìm kiếm bài hát hoặc nghệ sĩ..." oninput="filterSongs()">
-    </div>
-
-    <div class="actions-area">
-      <label class="btn-add" title="Chọn file mp3 từ máy">
-        🌸 ＋ Thêm nhạc (.mp3)
-        <input type="file" id="file-input" accept="audio/*" multiple style="display:none;" onchange="handleFileSelect(event)">
-      </label>
     </div>
   </header>
 
@@ -958,6 +1133,14 @@
       document.getElementById('artist').innerText = song.artist;
       audio.src = song.url;
 
+      // Cập nhật ảnh bìa trên đĩa than
+      if (song.cover) {
+        disk.style.background = `url('${song.cover}') center/cover no-repeat`;
+        disk.innerText = '';
+      } else {
+        disk.style.background = `radial-gradient(circle, #f472b6 18%, #1f0b1f 65%, #100511 100%)`;
+      }
+
       updatePlaylistHighlight();
 
       if (autoPlay) {
@@ -972,7 +1155,7 @@
         navigator.mediaSession.metadata = new MediaMetadata({
           title: song.title,
           artist: song.artist,
-          artwork: [{ src: 'https://images.unsplash.com/photo-1528164344705-475426879c0d?w=300' }]
+          artwork: [{ src: song.cover || 'https://images.unsplash.com/photo-1528164344705-475426879c0d?w=300' }]
         });
       }
 
@@ -1115,15 +1298,21 @@
       const container = document.getElementById('playlist');
       container.innerHTML = list.map((s, i) => {
         const isActive = i === currentIndex;
+        const iconOrCover = s.cover 
+          ? `<img src="${s.cover}" class="row-cover-img" alt="${s.title}" onerror="this.outerHTML='🌸'">` 
+          : `🌸`;
         return `
           <div class="song-row ${isActive ? 'active' : ''} ${isActive && !audio.paused ? 'playing' : ''}" onclick="loadSong(${i})">
             <span class="row-index">${i + 1}</span>
             <div class="row-title-area">
-              <div class="row-icon-music">🌸</div>
-              <span class="row-title">${s.title}</span>
+              <div class="row-icon-music">${iconOrCover}</div>
+              <div class="row-text-group">
+                <span class="row-title">${s.title}</span>
+                <span class="row-artist-mobile">${s.artist}</span>
+              </div>
             </div>
-            <span class="row-artist">${s.artist}</span>
-            <span style="font-size:13px; color:var(--text-sub); font-variant-numeric: tabular-nums;">${s.duration || ''}</span>
+            <span class="row-artist row-artist-desktop">${s.artist}</span>
+            <span class="row-duration" style="font-size:13px; color:var(--text-sub); font-variant-numeric: tabular-nums;">${s.duration || ''}</span>
             <div class="row-status">
               <div class="eq-wave">
                 <span class="eq-bar"></span>
