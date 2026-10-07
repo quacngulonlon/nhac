@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>🌸 音楽 · Kho Nhạc Cá Nhân</title>
+  <title>🌸 音楽 · Kho Nhạc Cá Nhân - Sakura Player</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3844/3844724.png">
   <style>
     :root {
@@ -992,109 +992,103 @@
       }
     }
 
-    // Danh sách 17 bài hát theo đúng thứ tự và tên trong ảnh
+    // Danh sách 16 bài hát theo yêu cầu mới nhất
     let songs = [
       {
         title: "đen đá không đường",
         artist: "AMEE",
         duration: "3:00",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/AMEE.-.den.da.khong.d.ng"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/AMEE.-.den.da.khong.d.ng"
       },
       {
         title: "Ngại Ngùng",
         artist: "Kha",
         duration: "4:18",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/Kha.-.Ng.i.Ngung.SPOTISAVER.mp3"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/Kha.-.Ng.i.Ngung.SPOTISAVER.mp3"
       },
       {
         title: "Bận Lòng",
         artist: "Pay, Phongkhin",
         duration: "3:22",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/Pay.Phongkhin.-.B.n.Long.SPOTISAVER.mp3"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/Pay.Phongkhin.-.B.n.Long.SPOTISAVER.mp3"
       },
       {
         title: "Mưa Trong Lòng",
         artist: "Tùng Maru, Vũ Phụng Tiên",
         duration: "4:14",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/Tung.Maru.Vu.Phung.Tien.-.m.a.trong.long"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/Tung.Maru.Vu.Phung.Tien.-.m.a.trong.long"
       },
       {
         title: "Trên Tình Bạn Dưới Tình Yêu",
         artist: "MIN",
         duration: "3:19",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/MIN.-.Tren.Tinh.B.n.D.i.Tinh.Yeu.SPOTISAVER.mp3"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/MIN.-.Tren.Tinh.B.n.D.i.Tinh.Yeu.SPOTISAVER.mp3"
       },
       {
         title: "Chỉ Một Đêm Nữa Thôi",
         artist: "RPT MCK, tlinh",
         duration: "2:21",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/RPT.MCK-tlinh.-.ch.m.t.dem.nua.thoi"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/RPT.MCK-tlinh.-.ch.m.t.dem.nua.thoi"
       },
       {
         title: "từ thích thích thành thương thương",
         artist: "AMEE, Hoàng Dũng",
         duration: "3:24",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/AMEE.Hoang.Dung.-.t.thich.thich.thanh.th.ng.th.ng"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/AMEE.Hoang.Dung.-.t.thich.thich.thanh.th.ng.th.ng"
       },
       {
         title: "giữ lấy làm gì",
         artist: "MONSTAR",
         duration: "3:20",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/MONSTAR.-.gi.l.y.lam.gi.SPOTISAVER.mp3"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/MONSTAR.-.gi.l.y.lam.gi.SPOTISAVER.mp3"
       },
       {
         title: "Bản Nhạc Cuối (Cho Em)",
         artist: "B Ray",
         duration: "3:13",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/B.Ray.-.b.n.nh.c.cu.i.cho.em"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/B.Ray.-.b.n.nh.c.cu.i.cho.em"
       },
       {
         title: "gắn bó né tránh sợ hãi (interlude)",
         artist: "Wren Evans, itsnk",
         duration: "1:44",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/Wren.Evans.itsnk.-.g.n.bo.ne.tranh.s.hai.interlude.SPOTISAVER.mp3"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/Wren.Evans.itsnk.-.g.n.bo.ne.tranh.s.hai.interlude.SPOTISAVER.mp3"
       },
       {
         title: "Một Cái Ôm",
         artist: "RPT MCK",
         duration: "3:21",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/RPT.MCK.-.m.t.cai.om"
-      },
-      {
-        title: "100 < 1",
-        artist: "VƯƠNG BÌNH",
-        duration: "4:58",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/VUONG.BINH"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/RPT.MCK.-.m.t.cai.om"
       },
       {
         title: "tình yêu chậm trễ",
         artist: "MONSTAR, GREY D, NICKY, VƯƠNG BÌNH",
         duration: "4:06",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/MONSTAR.GREY.D.NICKY.-.tinh.yeu.ch.m.tr.SPOTISAVER.mp3"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/MONSTAR.GREY.D.NICKY.-.tinh.yeu.ch.m.tr.SPOTISAVER.mp3"
       },
       {
         title: "Bầu Trời Mới",
         artist: "Da LAB, Minh Tốc & Lam",
         duration: "4:22",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/Da.LAB.Minh.-.b.u.tr.i.m.i"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/Da.LAB.Minh.-.b.u.tr.i.m.i"
       },
       {
-        title: "tinhdau tinhdau tinhdau",
-        artist: "Kai Đinh, Orange",
-        duration: "4:00",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/Kai.Dinh.Orange.-.tinhdau.tinhdau.tinhdau.SPOTISAVER.mp3"
+        title: "Nguyễn Văn Mười",
+        artist: "RPT MCK",
+        duration: "4:03",
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/Nguy.n.Van.M.i.-.MCK.-.MCK.__.Nger.mp3"
       },
       {
         title: "Ngày buồn tháng nhớ năm thương..",
         artist: "VƯƠNG BÌNH",
         duration: "4:46",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/V.NG.BINH.-.Ngay.bu.n.thang.nh.nam.th.ng.SPOTISAVER.mp3"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/V.NG.BINH.-.Ngay.bu.n.thang.nh.nam.th.ng.SPOTISAVER.mp3"
       },
       {
         title: "g9 (Outro)",
         artist: "AMEE",
         duration: "1:28",
-        url: "https://github.com/Bach2732008/nhac/releases/download/123/AMEE.-.g9.Outro"
+        url: "https://github.com/quacngulonlon/nhac/releases/download/123/AMEE.-.g9.Outro"
       }
     ];
 
